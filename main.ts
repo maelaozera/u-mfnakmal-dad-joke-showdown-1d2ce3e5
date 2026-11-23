@@ -53,6 +53,21 @@ const JOKE =
 // The harness expects the entry at this absolute path.
 const OUTPUT_PATH = "/output/entry.txt";
 
+// Guard the entry contract at runtime: the judged text must be a
+// single non-empty line within the 200-character limit. Fail loudly
+// instead of writing a malformed entry.
+if (JOKE.length === 0) {
+  throw new Error("Dad joke must not be empty.");
+}
+if (JOKE.length > 200) {
+  throw new Error(
+    `Dad joke must be at most 200 characters, got ${JOKE.length}.`,
+  );
+}
+if (JOKE.includes("\n") || JOKE.includes("\r")) {
+  throw new Error("Dad joke must be a single line without newlines.");
+}
+
 mkdirSync("/output", { recursive: true });
 
 // Written byte-exact: the joke alone, no trailing newline, so the entry
